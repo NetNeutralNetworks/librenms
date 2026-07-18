@@ -25,7 +25,10 @@ $device_id = (int) ($device['device_id'] ?? 0);
                 $stype .= "<option value='$check_name'>$check_name</option>";
             }
         }
-    } ?>
+    }
+
+    $remote_pollers = \App\Models\RemotePoller::orderBy('poller_name')->get();
+?>
 
 <div class="modal fade bs-example-modal-sm" id="create-service" tabindex="-1" role="dialog" aria-labelledby="Create" aria-hidden="true">
     <div class="modal-dialog">
@@ -95,6 +98,19 @@ $device_id = (int) ($device['device_id'] ?? 0);
                                 <label class='control-label text-left input-sm'>Parameters may be required and will be different depending on the service check.</label>
                             </div>
                         </div>
+                        <?php if (count($remote_pollers)) { ?>
+                        <div class="form-group row">
+                            <label for='remote_pollers' class='col-sm-3 control-label'>Remote Pollers </label>
+                            <div class="col-sm-9">
+                                <select multiple id='remote_pollers' name='remote_pollers[]' class='form-control'>
+                                    <?php foreach ($remote_pollers as $remote_poller) {
+                                        echo "<option value='" . $remote_poller->id . "'>" . htmlspecialchars($remote_poller->poller_name) . '</option>';
+                                    } ?>
+                                </select>
+                                <span class='help-block'>Also perform this check from the selected remote pollers.</span>
+                            </div>
+                        </div>
+                        <?php } ?>
                         <div class="form-group row">
                             <label for='ignore' class='col-sm-3 control-label'>Ignore alert tag </label>
                             <div class="col-sm-9">
@@ -137,6 +153,7 @@ $('#create-service').on('hide.bs.modal', function (event) {
     $('#service_template_id').val('');
     $('#name').val('');
     $('#service_template_name').val('');
+    $('#remote_pollers').val([]);
 });
 
 // on-load
@@ -168,6 +185,7 @@ $('#create-service').on('show.bs.modal', function (e) {
                 }
                 $('#service_template_id').val(output['service_template_id']);
                 $('#name').val(output['name']);
+                $('#remote_pollers').val(output['remote_pollers']);
             }
         });
     }

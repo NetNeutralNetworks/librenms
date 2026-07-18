@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Service extends DeviceRelatedModel
 {
@@ -100,5 +101,13 @@ class Service extends DeviceRelatedModel
     public function scopeIsDisabled($query)
     {
         return $query->where('service_disabled', 1);
+    }
+
+    // ---- Define Relationships ----
+
+    public function remotePollers(): BelongsToMany
+    {
+        return $this->belongsToMany(RemotePoller::class, 'remote_poller_services', 'service_id', 'remote_poller_id')
+            ->withPivot(['last_status', 'last_message', 'last_perf', 'last_checked']);
     }
 }

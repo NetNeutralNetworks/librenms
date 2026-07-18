@@ -6,6 +6,8 @@ use App\Console\Commands\MaintenanceDiscoverSslCertificates;
 use App\Console\Commands\MaintenanceFetchOuis;
 use App\Console\Commands\MaintenanceFetchRSS;
 use App\Console\Commands\MaintenanceRefreshSslCertificates;
+use App\Console\Commands\RemotePollerFetch;
+use App\Models\RemotePoller;
 use App\Facades\LibrenmsConfig;
 use App\Jobs\PingCheck;
 use App\Models\Eventlog;
@@ -177,6 +179,14 @@ Artisan::command('scan
 Schedule::call(function (): void {
     Cache::put('scheduler_working', now(), now()->addMinutes(6));
 })->name('schedule operational check')->everyFiveMinutes();
+
+// sync check definitions to remote service pollers and fetch their results
+Schedule::command(RemotePollerFetch::class)
+    ->everyMinute()
+    ->onOneServer()
+    ->withoutOverlapping()
+    ->when(fn () => RemotePoller::isEnabled()->exists())
+    ->onFailure(fn () => Eventlog::log('The scheduled command remote-poller:fetch failed to run.', null, 'poller', Severity::Error));
 
 // schedule maintenance, should be after all others
 $maintenance_log_file = LibrenmsConfig::get('log_dir') . '/maintenance.log';

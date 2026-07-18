@@ -295,6 +295,40 @@ return [
         'device' => 'Device :device:',
         'port' => 'Tuning port :port',
     ],
+    'remote-poller:add' => [
+        'description' => 'Register a remote service poller',
+        'arguments' => [
+            'name' => 'Unique name for the remote poller',
+            'url' => 'Base URL of the remote poller, must be https (example: https://poller1.example.com:8443)',
+        ],
+        'options' => [
+            'disabled' => 'Register the poller but do not enable it',
+            'skip-check' => 'Do not verify the poller is reachable before adding it',
+        ],
+        'unreachable' => 'Could not contact remote poller: :error (use --skip-check to add anyway)',
+        'added' => 'Added remote poller :name (id :id)',
+    ],
+    'remote-poller:fetch' => [
+        'description' => 'Push check definitions to remote service pollers and fetch their latest results',
+        'arguments' => [
+            'poller' => 'Only sync this remote poller (name or id), defaults to all enabled pollers',
+        ],
+        'no_pollers' => 'No matching remote pollers found',
+        'failed' => 'Failed to sync remote poller :poller: :error',
+        'success' => 'Synced remote poller :poller (:checks checks, :results results)',
+    ],
+    'remote-poller:list' => [
+        'description' => 'List all registered remote service pollers',
+        'none' => 'No remote pollers have been registered',
+    ],
+    'remote-poller:remove' => [
+        'description' => 'Remove a remote service poller and its check assignments',
+        'arguments' => [
+            'poller' => 'The remote poller to remove (name or id)',
+        ],
+        'not_found' => 'Remote poller :poller not found',
+        'removed' => 'Removed remote poller :name',
+    ],
     'report:devices' => [
         'description' => 'Print out data from devices',
         'columns' => 'Database columns:',

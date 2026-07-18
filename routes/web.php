@@ -115,6 +115,10 @@ Route::middleware(['auth'])->group(function (): void {
         Route::get('groups', [PollerController::class, 'groupsTab'])->name('poller.groups');
         Route::get('settings', [PollerController::class, 'settingsTab'])->name('poller.settings');
         Route::get('performance', [PollerController::class, 'performanceTab'])->name('poller.performance');
+        Route::get('remote', [App\Http\Controllers\RemotePollerController::class, 'index'])->name('poller.remote');
+        Route::post('remote', [App\Http\Controllers\RemotePollerController::class, 'store'])->name('poller.remote.store');
+        Route::post('remote/{remotePoller}/toggle', [App\Http\Controllers\RemotePollerController::class, 'toggle'])->name('poller.remote.toggle');
+        Route::delete('remote/{remotePoller}', [App\Http\Controllers\RemotePollerController::class, 'destroy'])->name('poller.remote.destroy');
         Route::resource('{id}/settings', PollerSettingsController::class, ['as' => 'poller'])->only(['update', 'destroy']);
         Route::delete('{poller}', [PollerController::class, 'destroy'])->name('poller.destroy');
         Route::delete('cluster/{poller_cluster}', [PollerController::class, 'destroyCluster'])->name('poller-cluster.destroy');

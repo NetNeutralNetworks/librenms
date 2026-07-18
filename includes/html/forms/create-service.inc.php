@@ -44,6 +44,8 @@ foreach (['stype', 'device_id', 'service_id'] as $varname) {
     ${$varname} = $vars[$varname] ?? '';
 }
 
+$remote_pollers = array_map('intval', (array) ($vars['remote_pollers'] ?? []));
+
 if (is_numeric($service_id) && $service_id > 0) {
     $service = Service::findOrFail($service_id);
     Gate::authorize('update', $service);
@@ -51,6 +53,7 @@ if (is_numeric($service_id) && $service_id > 0) {
 
     // Need to edit.
     if ($service->save()) {
+        $service->remotePollers()->sync($remote_pollers);
         $status = ['status' => 0, 'message' => 'Modified Service: <i>' . $service_id . ': ' . $stype . '</i>'];
     } else {
         $status = ['status' => 1, 'message' => 'ERROR: Failed to modify service: <i>' . $service_id . '</i>'];
@@ -62,6 +65,7 @@ if (is_numeric($service_id) && $service_id > 0) {
     if ($service_id == false) {
         $status = ['status' => 1, 'message' => 'ERROR: Failed to add Service: <i>' . $stype . '</i>'];
     } else {
+        Service::find($service_id)?->remotePollers()->sync($remote_pollers);
         $status = ['status' => 0, 'message' => 'Added Service: <i>' . $service_id . ': ' . $stype . '</i>'];
     }
 }

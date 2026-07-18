@@ -6523,6 +6523,28 @@
             },
             "order": 3
         },
+        "remote_pollers.check_frequency": {
+            "default": 60,
+            "type": "integer",
+            "units": "seconds"
+        },
+        "remote_pollers.timeout": {
+            "default": 15,
+            "type": "integer",
+            "units": "seconds"
+        },
+        "remote_pollers.tls_ca": {
+            "default": "/certs/ca.crt",
+            "type": "text"
+        },
+        "remote_pollers.tls_cert": {
+            "default": "/certs/client.crt",
+            "type": "text"
+        },
+        "remote_pollers.tls_key": {
+            "default": "/certs/client.key",
+            "type": "text"
+        },
         "reporting.error": {
             "group": "system",
             "section": "reporting",

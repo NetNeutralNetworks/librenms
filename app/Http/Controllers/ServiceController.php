@@ -72,6 +72,7 @@ class ServiceController extends Controller
             'disabled' => $service->service_disabled,
             'template_id' => $service->service_template_id,
             'name' => $service->service_name,
+            'remote_pollers' => $service->remotePollers()->pluck('remote_pollers.id'),
         ]);
     }
 
@@ -86,6 +87,7 @@ class ServiceController extends Controller
         $this->authorize('delete', $service);
 
         $id = $service->service_id;
+        $service->remotePollers()->detach();
 
         if ($service->delete()) {
             return response()->json([

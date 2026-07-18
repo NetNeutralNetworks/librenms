@@ -746,6 +746,9 @@
                                 <li><a href="{{ route('poller.performance') }}"><i class="fa fa-line-chart fa-fw fa-lg" aria-hidden="true"></i> {{ __('Performance') }}</a></li>
                                 <li><a href="{{ route('poller.log') }}"><i class="fa fa-file-text fa-fw fa-lg" aria-hidden="true"></i> {{ __('Log') }}</a></li>
                                 @endcan
+                                @can('admin')
+                                <li><a href="{{ route('poller.remote') }}"><i class="fa fa-cloud fa-fw fa-lg" aria-hidden="true"></i> {{ __('Remote Pollers') }}</a></li>
+                                @endcan
                             </ul>
                         </li>
                         @endif

@@ -22,6 +22,11 @@
         <li role="presentation" @if( $current_tab == 'log' ) class="active" @endif>
           <a href="{{ route('poller.log') }}"><i class="fa fa-file-text fa-lg icon-theme" aria-hidden="true"></i> {{ __('Log') }}</a>
         </li>
+        @can('admin')
+        <li role="presentation" @if( $current_tab == 'remote' ) class="active" @endif>
+          <a href="{{ route('poller.remote') }}"><i class="fa fa-cloud fa-lg icon-theme" aria-hidden="true"></i> {{ __('Remote Pollers') }}</a>
+        </li>
+        @endcan
       </ul>
       <br />
 @endsection
